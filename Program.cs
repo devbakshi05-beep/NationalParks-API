@@ -50,7 +50,15 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = false
     };
 });
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 var app = builder.Build();
 
 // ✅ Middleware pipeline
@@ -60,7 +68,7 @@ var app = builder.Build();
 
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
